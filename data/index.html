@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"> -->
+    <script src="/jquery-1.4.min.js">
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTGO RGB SERVER</title>
+    <link rel="icon" href="data:,">
+    <style>
+        html {
+                font-family: Helvetica;
+                display: inline-block;
+                margin: 0px auto;
+                text-align: center;
+              }
+              h1{
+                color: #0F3376;
+                padding: 2vh;
+              }
+              p{
+                font-size: 1.5rem;
+              }
+              table {
+                border-collapse: collapse;
+                width:35%;
+                margin-left:auto;
+                margin-right:auto;
+              }
+              .button {
+                display: inline-block;
+                background-color: #008CBA;
+                border: none;
+                border-radius: 4px;
+                color: white;
+                padding: 16px 40px;
+                text-decoration: none;
+                font-size: 30px;
+                margin: 2px;
+                cursor: pointer;
+              }
+              .button2 {
+                background-color: #f44336;
+              } 
+            input[type=range] {
+                -webkit-appearance: none;
+                width: 300px;
+                border-radius: 10px; 
+            }
+            input[type=range]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+            }  
+            input[type=range]::-webkit-slider-runnable-track {
+                height: 15px;
+                border-radius: 10px; 
+                box-shadow: 0 1px 1px #def3f8, inset 0 .125em .125em #0d1112; 
+            }
+            input[type=range]:focus {
+                outline: none;
+            }
+            input[type=range]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                height: 25px;
+                width: 25px;
+                margin-top: -5px; 
+                background: #ffffff; 
+                border-radius: 50%; 
+                border: solid 0.125em rgba(205, 224, 230, 0.5); 
+                box-shadow: 0 .125em .125em #3b4547; 
+            }
+
+    </style>
+</head>
+
+<body>
+    <h1>TTGO RGB SERVER</h1>
+
+    <table>
+        <tr>
+            <th>
+                <button class="button" value="1" button onclick=btn_state(this.value)>ON </button>
+            </th>
+            <th>
+                <button class="button button2" value="0" button onclick=btn_state(this.value)>OFF</button>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <button class="button" value="1" onclick=btn_click(this.value)>MODE1</button>
+            </td>
+            <td>
+                <button class="button" value="2" onclick=btn_click(this.value)>MODE2</button>
+            </td>
+        <tr>
+            <td>
+                <button class="button" value="3" onclick=btn_click(this.value)>MODE3</button>
+            </td>
+            <td>
+                <button class="button" value="4" onclick=btn_click(this.value)>MODE4</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" id="PixelNums" class="form-control" placeholder="PixelNums" required="">
+            </td>
+            <td>
+                <button class="button" onclick=setNums()>SET</button>
+            </td>
+        </tr>
+    </table>
+
+    <p></p>
+    <p></p>
+
+    <input type="range" min="0" max="255" class="slider" onchange="slider_handle(this.value)" />
+    <p></p>
+
+    <p><a href="https://github.com/LilyGO">TTGO Github</a></p>
+    <script>
+        function setNums() {
+            var nums = document.getElementById("PixelNums");
+            if (nums.value == "") {
+                alert("Please input pixel nums");
+            }
+            if (nums.value > 999) {
+                alert("Exceed the limit");
+            } else {
+                $.post("/nums", { nums: nums.value });
+            }
+        }
+        function btn_state(value) {
+            $.post("/state", { state: value });
+        }
+        function btn_click(value) {
+            $.post("/mode", { mode: value });
+        }
+        function slider_handle(pos) {
+            $.post("/brightness", { brightness: pos });
+        }
+    </script>
+</body>
+
+</html>
